@@ -1,0 +1,277 @@
+#+TITLE: env-setup
+
+* Basics
+** Homebrew
+
+  https://brew.sh/
+
+  #+BEGIN_SRC bash
+  brew install bash
+  echo /usr/local/bin/bash | sudo tee -a /etc/shells
+
+  brew install fasd git git-lfs ispell p7zip ranger the_silver_searcher tmux tree unrar
+  #+END_SRC
+
+** Caskroom-fonts
+
+  #+BEGIN_SRC bash
+  brew tap caskroom/fonts
+  brew cask install font-firacode-nerd-font font-noto-sans-cjk-tc font-source-code-pro
+  #+END_SRC
+
+** iTerm2
+
+  Profiles -> Colors -> Solarized Dark
+  Profiles -> Text -> Font -> Change Font -> FuraCode Nerd Font
+  Profiles -> Text -> Font -> Use Ligatures
+
+  #+BEGIN_SRC bash
+  brew tap caskroom/versions
+  brew cask install iterm2-beta
+  #+END_SRC
+
+** oh-my-zsh
+
+  #+BEGIN_SRC bash
+  brew install zsh
+  echo /usr/local/bin/zsh | sudo tee -a /etc/shells
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  #+END_SRC
+
+  ~.zshrc~:
+  #+BEGIN_SRC bash
+  ZSH_THEME="agnoster"
+  plugins=(emacs fasd git osx pyenv)
+  #+END_SRC
+
+** XCode
+
+  #+BEGIN_SRC bash
+  xcode-select --install
+  #+END_SRC
+
+** Web Browsers
+
+  #+BEGIN_SRC bash
+  brew cask install firefox google-chrome google-chrome-canary vivaldi
+  #+END_SRC
+
+
+* Software Development
+** Node.js
+
+  #+BEGIN_SRC bash
+  brew install node yarn
+  sudo npm install -g n
+  n latest
+  #+END_SRC
+
+** Python
+
+  #+BEGIN_SRC bash
+  brew install pyenv
+  PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install -v 2.7.13
+  PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install -v 3.6.2
+  pyenv global 3.6.2
+  pip install --upgrade pip
+  #+END_SRC
+
+** Editors
+*** Emacs
+
+    #+BEGIN_SRC bash
+    brew tap d12frosted/emacs-plus
+    brew install emacs-plus --HEAD --with-natural-title-bar
+    brew linkapps emacs-plus
+    #+END_SRC
+
+*** Spacemacs
+
+    #+BEGIN_SRC bash
+    git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
+    emacs
+    #+END_SRC
+
+    ~.spacemacs~:
+    #+BEGIN_SRC elisp
+    (defun dotspacemacs/layers ()
+      (setq-default
+        dotspacemacs-configuration-layers
+        '(
+          asm
+          auto-completion
+          bibtex
+          (c-c++ :variables
+                 c-c++-default-mode-for-headers 'c++-mode)
+          common-lisp
+          docker
+          emacs-lisp
+          git
+          html
+          ivy
+          javascript
+          latex
+          (markdown :variables
+                    markdown-live-preview-engine 'vmd)
+          ocaml
+          (org :variables
+               org-enable-github-support t
+               org-enable-reveal-js-support t)
+          osx
+          python
+          ranger
+          (shell :variables
+                 shell-default-height 30
+                 shell-default-position 'bottom)
+          shell-scripts
+          spell-checking
+          syntax-checking
+          themes-megapack
+          version-control
+          ycmd
+          )
+
+        dotspacemacs-additional-packages
+        '(
+          quickrun
+          wttrin
+          )
+
+        dotspacemacs-install-packages 'used-but-keep-unused
+    ))
+
+    (defun dotspacemacs/init ()
+      (setq-default
+      dotspacemacs-elpa-https nil
+      dotspacemacs-themes '(material
+                            material-light)
+      dotspacemacs-default-font '("FuraCode Nerd Font"
+                                  :size 13
+                                  :weight normal
+                                  :width normal
+                                  :powerline-scale 1.1)
+      dotspacemacs-loading-progress-bar nil
+      dotspacemacs-fullscreen-at-startup t
+      dotspacemacs-fullscreen-use-non-native t
+      dotspacemacs-line-numbers 'relative
+      dotspacemacs-smartparens-strict-mode t
+      dotspacemacs-smart-closing-parenthesis t
+    ))
+
+    (defun dotspacemacs/user-config ()
+      ;; c-c++
+      (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11")))
+      ;; emacs-plus
+      (setq powerline-default-separator 'utf-8)
+      ;; latex
+      (setq TeX-engine 'xetex)
+      ;; org-mode
+      (setq org-reveal-root "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/")
+      (setq org-latex-pdf-process '("xelatex -interaction nonstopmode %f"))
+      ;; wttrin
+      (setq wttrin-default-cities '("Taipei"))
+      ;; ycmd
+      (setq ycmd-server-command '("python" "/Users/carlsu/Documents/ycmd/ycmd/"))
+      (setq ycmd-force-semantic-completion t)
+      (setq ycmd-extra-conf-handler 'load)
+      (set-variable 'ycmd-global-config "/Users/carlsu/Documents/ycmd/cpp/ycm/.ycm_extra_conf.py")
+      ;; ligatures
+      (when (window-system)
+        (set-default-font "FuraCode Nerd Font"))
+      (let ((alist '((33 . ".\\(?:\\(?:==\\|!!\\)\\|[!=]\\)")
+                  (35 . ".\\(?:###\\|##\\|_(\\|[#(?[_{]\\)")
+                  (36 . ".\\(?:>\\)")
+                  (37 . ".\\(?:\\(?:%%\\)\\|%\\)")
+                  (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
+                  (42 . ".\\(?:\\(?:\\*\\*/\\)\\|\\(?:\\*[*/]\\)\\|[*/>]\\)")
+                  (43 . ".\\(?:\\(?:\\+\\+\\)\\|[+>]\\)")
+                  (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
+                  (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
+                  (47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
+                  (48 . ".\\(?:x[a-zA-Z]\\)")
+                  (58 . ".\\(?:::\\|[:=]\\)")
+                  (59 . ".\\(?:;;\\|;\\)")
+                  (60 . ".\\(?:\\(?:!--\\)\\|\\(?:~~\\|->\\|\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[*$+~/<=>|-]\\)")
+                  (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
+                  (62 . ".\\(?:\\(?:=>\\|>[=>-]\\)\\|[=>-]\\)")
+                  (63 . ".\\(?:\\(\\?\\?\\)\\|[:=?]\\)")
+                  (91 . ".\\(?:]\\)")
+                  (92 . ".\\(?:\\(?:\\\\\\\\\\)\\|\\\\\\)")
+                  (94 . ".\\(?:=\\)")
+                  (119 . ".\\(?:ww\\)")
+                  (123 . ".\\(?:-\\)")
+                  (124 . ".\\(?:\\(?:|[=|]\\)\\|[=>|]\\)")
+                  (126 . ".\\(?:~>\\|~~\\|[>=@~-]\\)")
+                  )
+                ))
+      (dolist (char-regexp alist)
+        (set-char-table-range composition-function-table (car char-regexp)
+                              `([,(cdr char-regexp) 0 font-shape-gstring]))))
+    )
+    #+END_SRC
+
+*** Neovim
+
+    #+BEGIN_SRC bash
+    brew install neovim
+    ln -s /usr/local/bin/nvim /usr/local/bin/vim
+    pip install --upgrade neovim
+    #+END_SRC
+
+*** SpaceVim
+
+    #+BEGIN_SRC bash
+    brew install go
+    go get -u github.com/nsf/gocode
+    curl -sLf https://spacevim.org/install.sh | bash
+    nvim
+    #+END_SRC
+
+*** Visual Studio Code
+
+    #+BEGIN_SRC bash
+    brew cask install visual-studio-code
+    #+END_SRC
+
+    [[https://code.visualstudio.com/docs/setup/mac#_command-line][Install 'code' command in PATH]]
+
+    #+BEGIN_SRC bash
+    code --install-extension \
+      christian-kohler.npm-intellisense \
+      christian-kohler.path-intellisense \
+      dbaeumer.vscode-eslint \
+      eamodio.gitlens \
+      mkaufman.htmlhint \
+      ms-vscode.cpptools \
+      shinnn.stylelint \
+      vscodevim.vim \
+      DavidAnson.vscode-markdownlint \
+      PeterJausovec.vscode-docker
+    #+END_SRC
+
+*** Atom
+
+    #+BEGIN_SRC bash
+    brew cask install atom
+    #+END_SRC
+
+** Docker
+
+  #+BEGIN_SRC bash
+  brew cask install docker
+  #+END_SRC
+
+** Vagrant
+
+  #+BEGIN_SRC bash
+  brew cask install virtualbox virtualbox-extension-pack
+  brew cask install vagrant
+  #+END_SRC
+
+
+* Utilities
+
+#+BEGIN_SRC bash
+brew cask install alfred keepassx mactex rambox skim vlc
+#+END_SRC
+
