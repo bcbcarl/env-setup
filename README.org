@@ -1,64 +1,95 @@
 #+TITLE: env-setup
+#+AUTHOR: Carl X. Su
 
-* Basics
-** Homebrew
+* Homebrew
 
   https://brew.sh/
 
   #+BEGIN_SRC bash
-  brew install bash
-  echo /usr/local/bin/bash | sudo tee -a /etc/shells
-
-  brew install fasd git git-lfs ispell p7zip ranger the_silver_searcher tmux tree unrar
+  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   #+END_SRC
 
-** Caskroom-fonts
+* Web Browsers
+
+  #+BEGIN_SRC bash
+  brew cask install firefox google-chrome google-chrome-canary vivaldi
+  #+END_SRC
+
+* Bash 4
+
+  #+BEGIN_SRC bash
+  brew install bash
+  echo /usr/local/bin/bash | sudo tee -a /etc/shells
+  chsh -s /usr/local/bin/bash
+  #+END_SRC
+
+* XCode Command Line Tools
+
+  #+BEGIN_SRC bash
+  xcode-select --install
+  #+END_SRC
+
+* Caskroom-fonts
 
   #+BEGIN_SRC bash
   brew tap caskroom/fonts
-  brew cask install font-firacode-nerd-font font-noto-sans-cjk-tc font-source-code-pro
+  brew cask install font-fira-code font-firacode-nerd-font font-noto-sans-cjk-tc font-source-code-pro
   #+END_SRC
 
-** iTerm2
-
-  Profiles -> Colors -> Solarized Dark
-  Profiles -> Text -> Font -> Change Font -> FuraCode Nerd Font
-  Profiles -> Text -> Font -> Use Ligatures
+* iTerm2
 
   #+BEGIN_SRC bash
   brew tap caskroom/versions
   brew cask install iterm2-beta
   #+END_SRC
 
-** oh-my-zsh
+  1. Profiles -> Colors -> Import... -> Solarized Dark - Patched.itermcolors
+  2. Profiles -> Text -> Font -> Change Font -> Fira Code
+  3. Profiles -> Text -> Font -> Use Ligatures
+  4. Profiles -> Keys -> + -> option-right -> Send Escape Sequence -> f
+  5. Profiles -> Keys -> + -> option-left -> Send Escape Sequence -> b
+
+* GNU ls
 
   #+BEGIN_SRC bash
-  brew install zsh
-  echo /usr/local/bin/zsh | sudo tee -a /etc/shells
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  brew install coreutils
+  wget https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark -O ~/.dir_colors
+  alias ls='gls --color=auto'
+  eval $(gdircolors $HOME/.dir_colors)
   #+END_SRC
 
-  ~.zshrc~:
-  #+BEGIN_SRC bash
-  ZSH_THEME="agnoster"
-  plugins=(emacs fasd git osx pyenv)
-  #+END_SRC
-
-** XCode
+* less
 
   #+BEGIN_SRC bash
-  xcode-select --install
+  export LESSOPEN='| /usr/local/bin/src-hilite-lesspipe.sh %s'
+  export LESS=' -RXF'
+  alias less='less -m -N -g -i -J --underline-special --SILENT'
   #+END_SRC
 
-** Web Browsers
+* Git
 
   #+BEGIN_SRC bash
-  brew cask install firefox google-chrome google-chrome-canary vivaldi
+  brew install git git-lfs
+  git config --global user.name <username>
+  git config --global user.email <email>
+  git lfs install
+  sudo git lfs install --system
   #+END_SRC
 
+* tmux
 
-* Software Development
-** Node.js
+  #+BEGIN_SRC bash
+  brew install tmux
+  #+END_SRC
+
+  ~.tmux.conf~:
+  #+BEGIN_SRC conf
+  set -g default-terminal "xterm-256color"
+  set -ga terminal-overrides ",xterm-256color:Tc"
+  set -g mouse on
+  #+END_SRC
+
+* Node.js
 
   #+BEGIN_SRC bash
   brew install node yarn
@@ -66,7 +97,7 @@
   n latest
   #+END_SRC
 
-** Python
+* Python
 
   #+BEGIN_SRC bash
   brew install pyenv
@@ -76,7 +107,59 @@
   pip install --upgrade pip
   #+END_SRC
 
-** Editors
+* Ranger
+
+  #+BEGIN_SRC bash
+  brew install atool exiftool highlight libcaca mediainfo mpv p7zip poppler ranger transmission unrar vlc w3m
+  ranger --copy-config=all
+  #+END_SRC
+
+  ~.config/ranger/rc.conf~:
+  #+BEGIN_SRC conf
+  set show_hidden true
+  set preview_images true
+  set preview_images_method iterm2
+  #+END_SRC
+
+  #+BEGIN_SRC bash
+  export RANGER_LOAD_DEFAULT_RC='FALSE'
+  #+END_SRC
+
+* Utilities
+
+  #+BEGIN_SRC bash
+  brew install fasd ispell the_silver_searcher tree
+  brew cask install alfred amethyst android-platform-tools docker keepassx mactex rambox skim spotify virtualbox virtualbox-extension-pack
+  #+END_SRC
+
+* Zsh
+
+  install:
+  #+BEGIN_SRC bash
+  brew install source-highlight zsh
+  echo /usr/local/bin/zsh | sudo tee -a /etc/shells
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  #+END_SRC
+
+  customize:
+  #+BEGIN_SRC bash
+  git clone https://github.com/bhilburn/powerlevel9k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel9k
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+  git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+  #+END_SRC
+
+  ~.zshrc~:
+  #+BEGIN_SRC bash
+  export TERM=xterm-256color
+  ZSH_THEME="powerlevel9k/powerlevel9k"
+  plugins=(adb colored-man-pages docker emacs fasd git osx pyenv zsh-autosuggestions zsh-syntax-highlighting)
+  export DEFAULT_USER=$(whoami)
+  #+END_SRC
+
+  reference:
+  - https://gist.github.com/kevin-smets/8568070
+
+* Editors
 *** Emacs
 
     #+BEGIN_SRC bash
@@ -84,8 +167,6 @@
     brew install emacs-plus --HEAD --with-natural-title-bar
     brew linkapps emacs-plus
     #+END_SRC
-
-*** Spacemacs
 
     #+BEGIN_SRC bash
     git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
@@ -145,8 +226,8 @@
       dotspacemacs-elpa-https nil
       dotspacemacs-themes '(material
                             material-light)
-      dotspacemacs-default-font '("FuraCode Nerd Font"
-                                  :size 13
+      dotspacemacs-default-font '("Fira Code"
+                                  :size 14
                                   :weight normal
                                   :width normal
                                   :powerline-scale 1.1)
@@ -177,7 +258,7 @@
       (set-variable 'ycmd-global-config "/Users/carlsu/Documents/ycmd/cpp/ycm/.ycm_extra_conf.py")
       ;; ligatures
       (when (window-system)
-        (set-default-font "FuraCode Nerd Font"))
+        (set-default-font "Fira Code"))
       (let ((alist '((33 . ".\\(?:\\(?:==\\|!!\\)\\|[!=]\\)")
                   (35 . ".\\(?:###\\|##\\|_(\\|[#(?[_{]\\)")
                   (36 . ".\\(?:>\\)")
@@ -218,8 +299,6 @@
     pip install --upgrade neovim
     #+END_SRC
 
-*** SpaceVim
-
     #+BEGIN_SRC bash
     brew install go
     go get -u github.com/nsf/gocode
@@ -241,12 +320,44 @@
       christian-kohler.path-intellisense \
       dbaeumer.vscode-eslint \
       eamodio.gitlens \
-      mkaufman.htmlhint \
+      mkaufman.HTMLHint \
       ms-vscode.cpptools \
+      robertohuertasm.vscode-icons \
       shinnn.stylelint \
       vscodevim.vim \
       DavidAnson.vscode-markdownlint \
-      PeterJausovec.vscode-docker
+      PeterJausovec.vscode-docker \
+      Tyriar.sort-lines
+    #+END_SRC
+
+    #+BEGIN_SRC json
+    {
+      "editor.fontFamily": "'Fira Code', monospace",
+      "editor.fontSize": 14,
+      "editor.lineNumbers": "relative",
+      "editor.rulers": [80],
+      "editor.tabSize": 2,
+      "editor.minimap.renderCharacters": false,
+      "editor.cursorBlinking": "phase",
+      "editor.fontLigatures": true,
+      "editor.renderControlCharacters": true,
+      "editor.renderIndentGuides": true,
+      "workbench.colorTheme": "Solarized Dark",
+      "workbench.iconTheme": "vscode-icons",
+      "stylelint.enable": true,
+      "css.validate": false,
+      "terminal.external.osxExec": "iTerm.app",
+      "terminal.integrated.fontLigatures": true,
+      "telemetry.enableCrashReporter": false,
+      "telemetry.enableTelemetry": false,
+      "javascript.referencesCodeLens.enabled": true,
+      "typescript.referencesCodeLens.enabled": true,
+      "typescript.implementationsCodeLens.enabled": true,
+      "vsicons.projectDetection.disableDetect": true,
+      "vim.useSystemClipboard": true,
+      "vim.enableNeovim": true,
+      "vim.disableAnnoyingNeovimMessage": true
+    }
     #+END_SRC
 
 *** Atom
@@ -255,23 +366,51 @@
     brew cask install atom
     #+END_SRC
 
-** Docker
+    #+BEGIN_SRC bash
+    apm install \
+      atom-ternjs \
+      busy-signal \
+      editorconfig \
+      file-icons \
+      git-plus \
+      git-time-machine \
+      intentions \
+      language-docker \
+      language-markdown \
+      linter \
+      linter-clang \
+      linter-eslint \
+      linter-stylelint \
+      linter-ui-default \
+      merge-conflicts \
+      project-manager \
+      react \
+      relative-numbers \
+      sort-lines \
+      vim-mode-plus
+    #+END_SRC
 
-  #+BEGIN_SRC bash
-  brew cask install docker
-  #+END_SRC
-
-** Vagrant
-
-  #+BEGIN_SRC bash
-  brew cask install virtualbox virtualbox-extension-pack
-  brew cask install vagrant
-  #+END_SRC
-
-
-* Utilities
-
-#+BEGIN_SRC bash
-brew cask install alfred keepassx mactex rambox skim vlc
+~config.cson~:
+#+BEGIN_SRC coffee
+"*":
+  core:
+    disabledPackages: [
+      "language-gfm"
+    ]
+    telemetryConsent: "no"
+    themes: [
+      "one-dark-ui"
+      "solarized-dark-syntax"
+    ]
+    titleBar: "hidden"
+  editor:
+    fontFamily: "Fira Code"
+    showIndentGuide: true
+    showInvisibles: true
+  welcome:
+    showOnStartup: false
 #+END_SRC
 
+* ycmd
+
+  https://github.com/Valloric/YouCompleteMe/blob/master/README.md#installation
