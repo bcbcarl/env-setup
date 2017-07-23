@@ -91,10 +91,16 @@
 
 * Node.js
 
+  Node.js:
   #+BEGIN_SRC bash
-  brew install node yarn
+  brew install node
   sudo npm install -g n
   n latest
+  #+END_SRC
+
+  yarn:
+  #+BEGIN_SRC bash
+  brew install yarn --ignore-dependencies
   #+END_SRC
 
 * Python
