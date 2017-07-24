@@ -61,6 +61,7 @@
 * less
 
   #+BEGIN_SRC bash
+  brew install source-highlight
   export LESSOPEN='| /usr/local/bin/src-hilite-lesspipe.sh %s'
   export LESS=' -RXF'
   alias less='less -m -N -g -i -J --underline-special --SILENT'
@@ -142,7 +143,7 @@
 
   install:
   #+BEGIN_SRC bash
-  brew install source-highlight zsh
+  brew install zsh
   echo /usr/local/bin/zsh | sudo tee -a /etc/shells
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
   #+END_SRC
