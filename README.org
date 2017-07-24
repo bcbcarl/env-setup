@@ -117,7 +117,8 @@
 * Ranger
 
   #+BEGIN_SRC bash
-  brew install atool exiftool highlight libcaca mediainfo mpv p7zip poppler ranger transmission unrar vlc w3m
+  brew install atool exiftool highlight libcaca mediainfo p7zip poppler ranger transmission unrar w3m
+  brew install mpv --with-bundle
   ranger --copy-config=all
   #+END_SRC
 
@@ -136,7 +137,7 @@
 
   #+BEGIN_SRC bash
   brew install fasd ispell the_silver_searcher tree
-  brew cask install alfred amethyst android-platform-tools docker keepassx mactex rambox skim spotify virtualbox virtualbox-extension-pack
+  brew cask install alfred amethyst android-platform-tools docker keepassx mactex rambox skim spotify virtualbox virtualbox-extension-pack vlc
   #+END_SRC
 
 * Zsh
