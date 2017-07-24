@@ -87,6 +87,7 @@
   #+BEGIN_SRC conf
   set -g default-terminal "xterm-256color"
   set -ga terminal-overrides ",xterm-256color:Tc"
+  set -g escape-time 10
   set -g mouse on
   #+END_SRC
 
@@ -222,6 +223,7 @@
 
         dotspacemacs-additional-packages
         '(
+          editorconfig
           quickrun
           wttrin
           )
@@ -250,6 +252,8 @@
     (defun dotspacemacs/user-config ()
       ;; c-c++
       (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11")))
+      ;; editorconfig
+      (editorconfig-mode 1)
       ;; emacs-plus
       (setq powerline-default-separator 'utf-8)
       ;; latex
