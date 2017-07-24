@@ -364,7 +364,10 @@
       "vsicons.projectDetection.disableDetect": true,
       "vim.useSystemClipboard": true,
       "vim.enableNeovim": true,
-      "vim.disableAnnoyingNeovimMessage": true
+      "vim.disableAnnoyingNeovimMessage": true,
+      "search.exclude": {
+        "**/node_modules": false
+      }
     }
     #+END_SRC
 
