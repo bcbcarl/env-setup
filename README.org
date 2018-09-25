@@ -125,9 +125,9 @@
 
   ~.config/ranger/rc.conf~:
   #+BEGIN_SRC conf
-  set show_hidden true
   set preview_images true
   set preview_images_method iterm2
+  set colorscheme solarized
   #+END_SRC
 
   #+BEGIN_SRC bash
