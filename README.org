@@ -429,3 +429,9 @@
 * ycmd
 
   https://github.com/Valloric/YouCompleteMe/blob/master/README.md#installation
+
+* Misc.
+
+  #+BEGIN_SRC bash
+  defaults write com.apple.screencapture disable-shadow true
+  #+END_SRC
