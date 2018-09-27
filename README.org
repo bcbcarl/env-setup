@@ -96,11 +96,17 @@
   Node.js:
   #+BEGIN_SRC bash
   brew install node
-  sudo npm install -g n
-  n latest
   #+END_SRC
 
-  yarn:
+  NPM prefix:
+  #+BEGIN_SRC bash
+  mkdir ~/.npm-global
+  npm config set prefix '~/.npm-global'
+  echo 'export PATH="$HOME/.npm-global/bin:$PATH"' >> ~/.profile
+  source ~/.profile
+  #+END_SRC
+
+  Yarn:
   #+BEGIN_SRC bash
   brew install yarn --ignore-dependencies
   #+END_SRC
