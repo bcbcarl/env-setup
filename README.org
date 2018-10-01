@@ -163,12 +163,17 @@
   git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
   #+END_SRC
 
+  24-bit true color:
+  #+BEGIN_SRC bash
+  tic -x -o ~/.terminfo terminfo-24bit.src
+  #+END_SRC
+
   ~.zshrc~:
   #+BEGIN_SRC bash
-  export TERM=xterm-256color
+  export TERM=xterm-24bit
+  export DEFAULT_USER=$(whoami)
   ZSH_THEME="powerlevel9k/powerlevel9k"
   plugins=(adb colored-man-pages docker emacs fasd git osx pyenv zsh-autosuggestions zsh-syntax-highlighting)
-  export DEFAULT_USER=$(whoami)
   #+END_SRC
 
   reference:
